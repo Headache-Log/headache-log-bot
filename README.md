@@ -44,3 +44,37 @@ The bot is a thin client:
 - stores no persistent data;
 - communicates with the backend API over HTTP.
 
+  Telegram User
+        ↓
+  Telegram Bot
+        ↓
+Headache Log API
+        ↓
+    PostgreSQL
+
+## Configuration
+
+The bot is configured via environment variables:
+
+- `BOT_TOKEN` — Telegram bot token
+- `API_BASE_URL` — Headache Log API endpoint
+- `BOT_DEFAULT_LANGUAGE` (optional)
+
+Secrets must **not** be committed to the repository.
+
+## Deployment
+
+The bot is designed to run:
+- in Docker
+- inside Kubernetes
+- on ARM64 (Raspberry Pi)
+
+Production deployment is handled in the [headache-log-k8s](https://github.com/Headache-Log/headache-log-k8s) repository.
+
+## Status
+
+🚧 Early development (HomeLab project)
+
+## Disclaimer
+
+This project is **not** a medical application and does not provide medical advice.

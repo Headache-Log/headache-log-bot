@@ -1,80 +1,109 @@
-# Headache Log — Telegram Bot
+# Headache Log – Telegram Bot
 
-Telegram bot for the Headache Log project.  
-Provides a simple and private interface for logging headache and migraine episodes.
+Telegram-бот для ведения персонального журнала головной боли / мигрени.
+Проект является частью экосистемы Headache Log и разрабатывается как production-ready pet-project с прицелом на Docker и
+Kubernetes.
 
-## Overview
+---
 
-The bot allows users to:
-- create headache entries with a single action;
-- view recent history;
-- export their data as CSV;
-- edit or delete existing entries.
+## 📢 Отказ от ответственности
 
-Each user is identified by their Telegram `user_id`.  
-No registration, passwords, or personal profiles are used.
+Этот проект **не** является медицинским приложением и не предоставляет медицинских рекомендаций.
 
-## Core principles
 
-- 🔒 Privacy-first (no tracking, no third-party analytics)
-- 🧠 Simple journaling, no medical advice
-- 👤 One Telegram user → one private log
-- 🌍 Multilingual (based on Telegram language settings)
+## 🎯 Цель проекта
 
-## Features (MVP)
+- Быстро фиксировать приступы мигрени
+- Минимальный UX (один клик в момент приступа)
+- Персональный учёт (на основе Telegram user)
+- Экспорт данных (CSV)
 
-- Create a new entry (timestamp is set automatically)
-- View last 10 entries
-- Export full history as CSV (date + comment)
-- Edit comment
-- Soft delete entries
-- Inline keyboard-based UX
+## 🔍 Обзор
 
-## Tech stack
+Бот позволяет пользователям:
 
-- Python
-- python-telegram-bot
-- Async I/O
-- REST API integration ([headache-log-api](https://github.com/Headache-Log/headache-log-api))
+- создавать записи о головной боли одним действием;
+- просматривать недавнюю историю;
+- экспортировать свои данные в формате CSV;
+- редактировать или удалять существующие записи.
 
-## Architecture
+Каждый пользователь идентифицируется по своему Telegram `user_id`.  
+Регистрация, пароли или личные профили не используются.
 
-The bot is a thin client:
-- contains no business logic;
-- stores no persistent data;
-- communicates with the backend API over HTTP.
+## 📜 Основные принципы
 
-  Telegram User
-        ↓
-  Telegram Bot
-        ↓
-Headache Log API
-        ↓
-    PostgreSQL
+- 🔒 Конфиденциальность превыше всего (без отслеживания, без сторонней аналитики)
+- 🧠 Простое ведение дневника, без медицинских рекомендаций
+- 👤 Один пользователь Telegram → один личный дневник
+- 🌍 Многоязычность (на основе языковых настроек Telegram)
 
-## Configuration
+## ⚙️ Функции (MVP)
 
-The bot is configured via environment variables:
+- Создание новой записи (временная метка устанавливается автоматически)
+- Просмотр последних 10 записей
+- Экспорт полной истории в формате CSV (дата + комментарий)
+- Редактирование комментариев
+- Временное удаление записей (`deleted_at`)
+- Встроенный интерфейс на основе клавиатуры
 
-- `BOT_TOKEN` — Telegram bot token
-- `API_BASE_URL` — Headache Log API endpoint
-- `BOT_DEFAULT_LANGUAGE` (optional)
+## 🧰 Технологии
 
-Secrets must **not** be committed to the repository.
+- Python 3.11 – основной язык
+- python-telegram-bot – библиотека для работы с API Telegram
+- Poetry – управление зависимостями
+- Docker – локальный запуск и деплой
+- Kubernetes – целевая среда [headache-log-k8s](https://github.com/Headache-Log/headache-log-k8s)
+- REST API – бизнес-логика ([headache-log-api](https://github.com/Headache-Log/headache-log-api))
 
-## Deployment
+## 📂 Структура проекта
 
-The bot is designed to run:
-- in Docker
-- inside Kubernetes
-- on ARM64 (Raspberry Pi)
+```text
+headache-log-bot/
+├── bot/
+│   ├── main.py          # entrypoint
+│   ├── config.py        # env / settings
+│   ├── handlers/        # telegram handlers
+│   └── services/        # внешние API
+├── tests/
+├── Dockerfile
+├── .env                 # local/dev (excluded)
+├── .gitignore
+├── pyproject.toml
+├── poetry.lock
+└── README.md
+```
 
-Production deployment is handled in the [headache-log-k8s](https://github.com/Headache-Log/headache-log-k8s) repository.
+## 🧠 Workflow разработки
 
-## Status
+- разработка ведётся через GitHub Issues + Project (Roadmap)
+- одна issue → логически завершённая задача
+- маленькие коммиты
+- при необходимости – Pull Request
 
-🚧 Early development (HomeLab project)
+## 📦 Деплой
 
-## Disclaimer
+- локально: Docker
+- production: Kubernetes (single-node HomeLab RPi)
+- TLS, ingress, secrets – в отдельном репозитории headache-log-k8s
 
-This project is **not** a medical application and does not provide medical advice.
+## 🔒 Безопасность
+
+- .env не коммитится
+- токены и секреты передаются через environment
+- production secrets — через Kubernetes Secrets
+
+## 🔔 Статус
+
+🚧 Ранний этап разработки
+
+## 🗺 Roadmap
+
+- [ ] UX /start и главное меню
+- [ ] CRUD записей
+- [ ] Экспорт CSV
+- [ ] Мультиязычность
+- [ ] Интеграция с backend API
+
+## 📄 Лицензия
+
+[MIT](https://github.com/Headache-Log/headache-log-bot/blob/main/LICENSE)
